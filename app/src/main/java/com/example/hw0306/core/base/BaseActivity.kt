@@ -5,30 +5,29 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 
 
-abstract class BaseActivity<DB : ViewBinding/*, VM : BaseViewModel*/>(
-    //  @LayoutRes private val layoutId: Int,
-    //  private val viewModelClass: Class<VM>
-) : AppCompatActivity() {
-    private lateinit var binding: DB
-    abstract fun inflateViewBinding(): DB
+abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatActivity() {
+
+    protected lateinit var binding: VB
+    protected abstract fun inflateViewBinding(): VB
+    protected abstract val viewModel: VM
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = inflateViewBinding()
         setContentView(binding.root)
 
-        initView()
-        initListener()
-
+        checkInternet()
+        setUI()
+        setupLiveData()
+        initClickListener()
     }
 
-    open fun initListener() {}
+    open fun setupLiveData() {} // инициализация Live data
 
-    open fun initView() {}
+    open fun setUI() {} // инициализация UI
 
-    open fun setupLiveData () {}
-    open fun setUI (){}
-    open fun checkInternet (){}
+    open fun initClickListener() {} // внутри этого метода обрабатываем все клики
 
-
+    open fun checkInternet() {} // внутри этого метода проверяем интернет
 
 }
